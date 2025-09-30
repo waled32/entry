@@ -137,6 +137,9 @@
   <div class="counter" id="counter">ENTRYS: 0</div>
   <img src="gif.gif" alt="Clicker GIF" id="clicker">
 
+  <!-- 🔊 Sound element -->
+  <audio id="clickSound" src="sound.mp3"></audio>
+
   <div class="progress">
     <div class="progress-bar" id="progressBar"></div>
   </div>
@@ -164,8 +167,9 @@
     const levelText = document.getElementById("levelText");
     const clicker = document.getElementById("clicker");
     const copyBtn = document.getElementById("copyCA");
+    const clickSound = document.getElementById("clickSound");
 
-    // 100 Level names (safe placeholders, replace with raw words if needed)
+    // 100 Level names
     const levels = [
       "Rookie Entry","Cheek Explorer","Grip Tester","Position Trainee","Bedroom Rookie",
       "Moan Hunter","Sneaky Toucher","Kiss Collector","Bed Jumper","Playtime Apprentice",
@@ -202,6 +206,10 @@
     clicker.addEventListener("click", () => {
       clicks++;
       counter.innerText = "Clicks: " + clicks;
+
+      // 🔊 Play click sound
+      clickSound.currentTime = 0; 
+      clickSound.play();
 
       let progress = (clicks % nextLevel) / nextLevel * 100;
       progressBar.style.width = progress + "%";
@@ -251,4 +259,3 @@
 
 </body>
 </html>
-```
