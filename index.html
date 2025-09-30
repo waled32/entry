@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>$ENTRY</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      text-align: center;
+      background: linear-gradient(135deg, #ff22cb, #3498db);
+      color: #fff;
+      min-height: 100vh;
+      margin: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+      padding: 40px 20px;
+    }
+    h1 {
+      font-size: 48px;
+      margin-bottom: 20px;
+      text-shadow: 2px 2px 6px rgba(0,0,0,0.3);
+    }
+    .counter {
+      font-size: 32px;
+      margin: 20px 0;
+      background: rgba(0,0,0,0.3);
+      padding: 15px 30px;
+      border-radius: 20px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.4);
+    }
+    img#clicker {
+      width: 250px;
+      cursor: pointer;
+      border-radius: 20px;
+      box-shadow: 0 6px 20px rgba(0,0,0,0.5);
+      transition: transform 0.2s;
+    }
+    img#clicker:hover { transform: scale(1.05); }
+    .progress {
+      width: 320px;
+      height: 25px;
+      margin: 20px auto;
+      background: rgba(0,0,0,0.2);
+      border-radius: 15px;
+      overflow: hidden;
+      box-shadow: inset 0 2px 5px rgba(0,0,0,0.3);
+    }
+    .progress-bar {
+      height: 100%;
+      width: 0%;
+      background: #f1c40f;
+      transition: width 0.3s ease-in-out;
+    }
+    #levelText {
+      font-size: 24px;
+      margin-bottom: 30px;
+      text-shadow: 1px 1px 3px rgba(0,0,0,0.3);
+    }
+    .buttons { margin-top: 20px; }
+    .buttons button {
+      margin: 8px;
+      padding: 12px 25px;
+      border: none;
+      border-radius: 15px;
+      cursor: pointer;
+      font-weight: bold;
+      background: linear-gradient(135deg, #e74c3c, #c0392b);
+      color: #fff;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .buttons button:hover {
+      transform: scale(1.05);
+      box-shadow: 0 6px 15px rgba(0,0,0,0.4);
+    }
+    #usernameDiv {
+      margin: 20px 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 10px;
+    }
+    #usernameInput {
+      padding: 8px 12px;
+      border-radius: 12px;
+      border: none;
+      font-size: 16px;
+    }
+    #setUsername {
+      padding: 8px 18px;
+      border-radius: 12px;
+      border: none;
+      background: linear-gradient(135deg, #e74c3c, #e74c3c);
+      color: #fff;
+      font-weight: bold;
+      cursor: pointer;
+      transition: transform 0.2s;
+    }
+    #setUsername:hover { transform: scale(1.05); }
+    #leaderboard {
+      margin-top: 40px;
+      width: 360px;
+      background: rgba(0,0,0,0.3);
+      border-radius: 20px;
+      padding: 20px;
+      box-shadow: 0 8px 25px rgba(0,0,0,0.5);
+    }
+    #leaderboard h2 {
+      margin-top: 0;
+      font-size: 28px;
+      text-decoration: underline;
+    }
+    #leaderboard div {
+      margin: 8px 0;
+      font-size: 20px;
+      background: rgba(255,255,255,0.1);
+      padding: 6px 10px;
+      border-radius: 10px;
+    }
+    @media(max-width: 400px){
+      #leaderboard, .progress { width: 90%; }
+      img#clicker { width: 200px; }
+    }
+  </style>
+</head>
+<body>
+
+  <h1>ENTRY HERE ⬇ </h1>
+
+  <!-- Username Input -->
+  <div id="usernameDiv">
+    <input type="text" id="usernameInput" placeholder="Your Twitter @">
+    <button id="setUsername">Set Username</button>
+  </div>
+
+  <div class="counter" id="counter">ENTRYS: 0</div>
+  <img src="gif.gif" alt="Clicker GIF" id="clicker">
+
+  <div class="progress">
+    <div class="progress-bar" id="progressBar"></div>
+  </div>
+
+  <div id="levelText">Level: 1 - Rookie Entry</div>
+
+  <div class="buttons">
+    <button onclick="window.open('https://x.com/yourcommunity','_blank')">X COMMUNITY</button>
+    <button onclick="window.open('https://pump.fun/entry','_blank')">BUY ON PUMP</button>
+    <button onclick="window.open('https://dexscreener.com/','_blank')">DEX</button>
+    <button id="copyCA">COPY CA</button>
+  </div>
+
+  <div id="leaderboard"></div>
+
+  <script>
+    let clicks = 0;
+    let level = 1;
+    const nextLevel = 50;
+    let username = "";
+    const contractAddress = "YOUR_CONTRACT_ADDRESS_HERE";
+
+    const counter = document.getElementById("counter");
+    const progressBar = document.getElementById("progressBar");
+    const levelText = document.getElementById("levelText");
+    const clicker = document.getElementById("clicker");
+    const copyBtn = document.getElementById("copyCA");
+
+    // 100 Level names (safe placeholders, replace with raw words if needed)
+    const levels = [
+      "Rookie Entry","Cheek Explorer","Grip Tester","Position Trainee","Bedroom Rookie",
+      "Moan Hunter","Sneaky Toucher","Kiss Collector","Bed Jumper","Playtime Apprentice",
+      "Entry Scout","Whisper Maker","Heat Finder","Pillow Fighter","Freak Initiate",
+      "Touch Rookie","Desire Starter","Body Scout","Tease Rookie","Entry Beginner",
+      "Backdoor Explorer","Rhythm Rider","Grip General","Deep Diver","Moan Chaser",
+      "Backshot Trainee","Thrust Seeker","Freak Rider","Sweat Collector","Pleasure General",
+      "Wild Rider","Heat Charger","Groan Hunter","Lust Captain","Entry Knight",
+      "Grip Soldier","Clap Maker","Stroke Apprentice","Passion Collector","Entry Warlord",
+      "Freak Rider II","Pleasure Pilot","Bedroom Bandit","Grip Commander","Backshot Captain",
+      "Thrust Master","Stroke Commander","Lust Warrior","Entry Guardian","Dungeon Trainee",
+      "Chain Rider","Mask Collector","Choke Apprentice","Grip Demon","Lust Devil",
+      "Passion Tyrant","Stroke Slayer","Moan Demon","Entry Sorcerer","Backdoor Lord",
+      "Groan Commander","Freak Destroyer","Whip Rider","Stroke Lord","Grip Beast",
+      "Entry Titan","Moan Tyrant","Pleasure Phantom","Entry Demon","Stroke God",
+      "Grip Warlord","Entry Warlock","Passion Destroyer","Dungeon Rider","Entry Fiend",
+      "Freak Overlord","Pleasure Beast","Entry Tyrant","Entry King","Backdoor God",
+      "Stroke Immortal","Grip Deity","Dungeon Overlord","Freak God","Entry Eternal",
+      "Moan Deity","Thrust Demon","Backshot Lord","Entry Immortal","Grip Titan",
+      "Bedroom Overlord","Entry Ascended","Freak Immortal","Stroke Emperor","Passion Lord",
+      "Entry Supreme","Backdoor Deity","The Final Entry"
+    ];
+
+    document.getElementById("setUsername").addEventListener("click", () => {
+      const input = document.getElementById("usernameInput").value.trim();
+      if(input) {
+        username = input;
+        alert("Username set to @" + username);
+      } else {
+        alert("Enter a valid handle!");
+      }
+    });
+
+    clicker.addEventListener("click", () => {
+      clicks++;
+      counter.innerText = "Clicks: " + clicks;
+
+      let progress = (clicks % nextLevel) / nextLevel * 100;
+      progressBar.style.width = progress + "%";
+
+      if(clicks > 0 && clicks % nextLevel === 0) {
+        level++;
+        const rankName = levels[level-1] || "Maxed Out";
+        levelText.innerText = "Level: " + level + " - " + rankName;
+
+        if(username) saveScore(username, clicks);
+        loadLeaderboard();
+      }
+    });
+
+    copyBtn.addEventListener("click", () => {
+      navigator.clipboard.writeText(contractAddress).then(() => {
+        copyBtn.innerText = "✅ Copied";
+        setTimeout(() => copyBtn.innerText = "COPY CA", 2000);
+      });
+    });
+
+    function saveScore(username, score) {
+      fetch("http://localhost:3000/saveScore", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ username, score })
+      }).then(res => res.text())
+        .then(msg => console.log("Saved:", msg))
+        .catch(err => console.error(err));
+    }
+
+    function loadLeaderboard() {
+      fetch("http://localhost:3000/leaderboard")
+        .then(res => res.json())
+        .then(data => {
+          let html = "<h2>Leaderboard</h2>";
+          data.forEach((row, i) => {
+            html += `<div>${i+1}. @${row.username} - ${row.score}</div>`;
+          });
+          document.getElementById("leaderboard").innerHTML = html;
+        })
+        .catch(err => console.error(err));
+    }
+
+    window.onload = loadLeaderboard;
+  </script>
+
+</body>
+</html>
+```
