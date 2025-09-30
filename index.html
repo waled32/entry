@@ -1,3 +1,4 @@
+```html
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -118,6 +119,26 @@
       padding: 6px 10px;
       border-radius: 10px;
     }
+    #showUsername {
+      font-size: 20px;
+      font-weight: bold;
+      margin-top: 10px;
+    }
+    #notification {
+      margin-top: 15px;
+      padding: 10px 15px;
+      border-radius: 10px;
+      background: rgba(0,0,0,0.6);
+      font-size: 16px;
+      display: none;
+      animation: fadeInOut 3s ease forwards;
+    }
+    @keyframes fadeInOut {
+      0% { opacity: 0; transform: translateY(-10px); }
+      10% { opacity: 1; transform: translateY(0); }
+      90% { opacity: 1; }
+      100% { opacity: 0; transform: translateY(-10px); }
+    }
     @media(max-width: 400px){
       #leaderboard, .progress { width: 90%; }
       img#clicker { width: 200px; }
@@ -133,6 +154,12 @@
     <input type="text" id="usernameInput" placeholder="Your Twitter @">
     <button id="setUsername">Set Username</button>
   </div>
+
+  <!-- Username display -->
+  <div id="showUsername"></div>
+
+  <!-- Notification -->
+  <div id="notification"></div>
 
   <div class="counter" id="counter">ENTRYS: 0</div>
   <img src="gif.gif" alt="Clicker GIF" id="clicker">
@@ -168,6 +195,17 @@
     const clicker = document.getElementById("clicker");
     const copyBtn = document.getElementById("copyCA");
     const clickSound = document.getElementById("clickSound");
+    const showUsername = document.getElementById("showUsername");
+    const notification = document.getElementById("notification");
+
+    // Show notification on screen
+    function showNotification(message) {
+      notification.innerText = message;
+      notification.style.display = "block";
+      setTimeout(() => {
+        notification.style.display = "none";
+      }, 3000);
+    }
 
     // 100 Level names
     const levels = [
@@ -195,11 +233,18 @@
 
     document.getElementById("setUsername").addEventListener("click", () => {
       const input = document.getElementById("usernameInput").value.trim();
-      if(input) {
+      if (input) {
+        const oldUsername = username;
         username = input;
-        alert("Username set to @" + username);
+        showUsername.innerText = "👤 @" + username;
+
+        if (oldUsername && oldUsername !== username) {
+          showNotification("Username changed to @" + username);
+        } else {
+          showNotification("Username set to @" + username);
+        }
       } else {
-        alert("Enter a valid handle!");
+        showNotification("⚠️ Enter a valid handle!");
       }
     });
 
@@ -214,12 +259,12 @@
       let progress = (clicks % nextLevel) / nextLevel * 100;
       progressBar.style.width = progress + "%";
 
-      if(clicks > 0 && clicks % nextLevel === 0) {
+      if (clicks > 0 && clicks % nextLevel === 0) {
         level++;
         const rankName = levels[level-1] || "Maxed Out";
         levelText.innerText = "Level: " + level + " - " + rankName;
 
-        if(username) saveScore(username, clicks);
+        if (username) saveScore(username, clicks);
         loadLeaderboard();
       }
     });
@@ -259,3 +304,4 @@
 
 </body>
 </html>
+```
